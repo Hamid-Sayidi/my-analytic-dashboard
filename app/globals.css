@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+@source "../node_modules/@tremor/**/*.{js,ts,jsx,tsx}";
+
+:root {
+  --background: #020617;
+  --foreground: #f8fafc;
+}
