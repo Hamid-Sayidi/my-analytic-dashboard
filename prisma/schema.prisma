@@ -16,5 +16,14 @@ model Transaction{
   deskripsi String
   nominal   Int
   tanggal   DateTime  @default(now())
-  kategori  String    @default("Pengeluaran")
+  tipe      String    //Pemasukan atau pengeluaran
+}
+
+model DreamSavings{
+  id            Int     @id @default(autoincrement())
+  title         String
+  targetAmount  Int
+  currentAmount Int     @default(0)
+  category      String?  
+  isCompelete   Boolean @default(false)
 }

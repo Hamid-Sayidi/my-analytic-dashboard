@@ -1,25 +1,47 @@
-export type Category =
-  | "Food"
-  | "Transport"
-  | "Hobby"
-  | "Bills"
-  | "Entertainment"
-  | "Health"
-  | "Education"
-  | "Other";
-
 export interface Transaction {
-  id: string;
-  amount: number;
-  category: Category;
-  date: string; //ISO string format
-  note: string;
-  type: "Income" | "Expense";
+  id: number;
+  nominal: number;
+  tanggal: string;
+  deskripsi: string;
+  tipe: "Income" | "Expense";
 }
 
-export interface AnalyticsSummary {
-  totalBalance: number;
-  totalIncome: number;
-  totalExpense: number;
-  expenseChangePercentage: number; //indikator perubahan persentase pengeluaran dibandingkan periode sebelumnya
+export interface ApiResponse {
+  transactions: Transaction[];
+  stats: {
+    totalBalance: number;
+    totalIncome: number;
+    totalExpense: number;
+  };
+  // expenseChangePercentage: number; //indikator perubahan persentase pengeluaran dibandingkan periode sebelumnya
+}
+
+export interface StatsProps {
+  balance: number;
+  income: number;
+  expense: number;
+}
+
+export interface TransactionTableProps {
+  transactions: Transaction[];
+  onEdit: (item: Transaction) => void;
+  searchQuery: string;
+  setSearchQuery: (val: string) => void;
+  filterType: string;
+  setFilterType: (val: string) => void;
+  currentPage: number;
+  totalPages: number;
+  setCurrentPage: (page: number | ((prev: number) => number)) => void;
+  currentMonthLabel: string;
+  handleNextMonth: () => void;
+  handlePrevMonth: () => void;
+}
+
+export interface DreamCardProps {
+  id: number;
+  title: string;
+  targetAmount: number;
+  currentAmount: number;
+  category?: string;
+  isCompelete: boolean;
 }

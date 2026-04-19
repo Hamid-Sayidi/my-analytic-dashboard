@@ -7,7 +7,20 @@ export async function GET() {
       orderBy: { tanggal: "desc" },
     });
 
-    return NextResponse.json(transactions);
+    const totalIncome = transactions
+      .filter((t) => t.tipe === "Income")
+      .reduce((acc, curr) => acc + curr.nominal, 0);
+
+    const totalExpense = transactions
+      .filter((t) => t.tipe === "Expense")
+      .reduce((acc, curr) => acc + curr.nominal, 0);
+
+    const totalBalance = totalIncome - totalExpense;
+
+    return NextResponse.json({
+      transactions,
+      stats: { totalBalance, totalIncome, totalExpense },
+    });
   } catch (error) {
     console.log("Gagal mengambil data transaksi", error);
     return NextResponse.json({ error: "Database lagi mogok" }, { status: 500 });
