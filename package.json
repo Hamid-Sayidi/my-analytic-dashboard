@@ -16,8 +16,8 @@
     "@tremor/react": "^3.18.7",
     "lucide-react": "latest",
     "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "swr": "latest"
   },
   "devDependencies": {
