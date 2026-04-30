@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import useSWR from "swr";
-import { Text, Flex, Button } from "@tremor/react";
+import { Text, Flex, Button, Title } from "@tremor/react";
 import TransactionDialog from "@/components/ui/transactionDialog";
 import TransactionTable from "@/components/table/transactionTable";
 import FinancialChart from "@/components/charts/FinancialChart";
 import StatsGrid from "@/components/statsgrid";
 import { ApiResponse, Transaction } from "@/types/transaction";
-import DreamCard from "@/components/dreamsavings/deramsavings";
+import DreamCard from "@/components/dreamsavings/dreamsavings";
+import DreamDialog from "@/components/ui/modal Dream/dreamDialog";
 import { DreamCardProps } from "@/types/transaction";
+import { PlusIcon } from "@heroicons/react/24/outline";
 // const data = [
 //   { bulan: "Jan", Nominal: 2890 },
 //   { bulan: "Feb", Nominal: 2756 },
@@ -59,12 +61,12 @@ export default function DashboardPage() {
     fetcher,
   );
 
-  const { data: dreams, mutate: mutateDreams } = useSWR<DreamCardProps[]>(
+  const { data: dreams, mutate: mutateDream } = useSWR<DreamCardProps[]>(
     "/api/dreams",
-    fetcher,
+    (url: string) => fetch(url).then((res) => res.json()),
   );
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   const allTransactions = data?.transactions || [];
   const stats = data?.stats || {
@@ -99,7 +101,7 @@ export default function DashboardPage() {
       new Date(selectedDate.setMonth(selectedDate.getMonth() + 1)),
     );
   };
-  const currentMountLabel = selectedDate.toLocaleDateString("id-ID", {
+  const currentMonthLabel = selectedDate.toLocaleDateString("id-ID", {
     month: "long",
     year: "numeric",
   });
@@ -155,7 +157,7 @@ export default function DashboardPage() {
             setFilterType(val);
             setCurrentPage(1);
           }}
-          currentMonthLabel={currentMountLabel}
+          currentMonthLabel={currentMonthLabel}
           handleNextMonth={handleNextMonth}
           handlePrevMonth={handlePrevMonth}
           currentPage={currentPage}
@@ -172,17 +174,33 @@ export default function DashboardPage() {
         refreshData={mutate}
         editData={selectedTransaction}
       />
-      {dreams?.map((dream: DreamCardProps) => (
-        <DreamCard
-          key={dream?.id}
-          id={dream?.id}
-          title={dream?.title}
-          targetAmount={dream?.targetAmount}
-          currentAmount={dream?.currentAmount}
-          category={dream?.category}
-          isCompelete={dream?.isCompelete}
-        />
-      ))}
+      <div className="space-y-6">
+        <Flex
+          justifyContent="between"
+          alignItems="center"
+          className="border-b border-slate-800 pb-4"
+        >
+          <div>
+            <Title className="text-white text-2-1 font-bold">Impian Anda</Title>
+            <p className="text-slate-400 text-sm mt-1">Kelola Tabungan Anda</p>
+          </div>
+          <DreamDialog />
+        </Flex>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {dreams?.map((dream: DreamCardProps) => (
+            <DreamCard
+              key={dream.id}
+              id={dream.id}
+              title={dream.title}
+              targetAmount={dream.targetAmount}
+              currentAmount={dream.currentAmount}
+              category={dream.category ?? "General"}
+              isComplete={dream.isComplete}
+              refreshData={mutateDream}
+            />
+          ))}
+        </div>
+      </div>
     </main>
   );
 }

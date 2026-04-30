@@ -3,6 +3,7 @@
 import { createTransaction } from "@/app/actions/route";
 import { useSWRConfig } from "swr";
 import { useEffect, useState } from "react";
+import { formatNumber, parseNumber } from "@/utils/formatters";
 import { Button, Dialog, DialogPanel, Text, TextInput } from "@tremor/react";
 
 interface Props {
@@ -22,21 +23,26 @@ export default function TransactionDialog({
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState("Expense");
+  const [displayAmount, setDisplayAmount] = useState("");
 
   useEffect(() => {
     if (editData) {
       setDesc(editData.deskripsi || "");
-      setAmount(editData.nominal?.toString() || "");
+      const nominalString = editData.nominal?.toString() || "";
+      setAmount(nominalString);
+      setDisplayAmount(formatNumber(nominalString));
       setType(editData.tipe || "Expense");
     } else {
       setDesc("");
       setAmount("");
+      setDisplayAmount("");
       setType("Expense");
     }
   }, [editData, isOpen]);
 
   const handlerSimpan = async () => {
-    if (!desc || !amount) return;
+    const cleanNominal = parseNumber(displayAmount);
+    if (!desc || cleanNominal <= 0) return;
 
     setLoading(true);
     try {
@@ -48,18 +54,19 @@ export default function TransactionDialog({
           },
           body: JSON.stringify({
             deskripsi: desc,
-            nominal: Number(amount),
+            nominal: cleanNominal,
             tipe: type,
           }),
         });
 
         if (!response.ok) throw new Error("Gagal update data");
       } else {
-        await createTransaction(desc, Number(amount), type);
+        await createTransaction(desc, cleanNominal, type);
       }
 
       setDesc("");
       setAmount("");
+      setDisplayAmount("");
       setIsOpen(false);
       refreshData();
       mutate("/api/transactions");
@@ -92,10 +99,15 @@ export default function TransactionDialog({
             {" "}
             <Text className="text-slate-400 mb-1">Nominal</Text>
             <TextInput
-              type="number"
+              type="text"
               placeholder="15000"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              value={displayAmount}
+              onChange={(e) => {
+                const val = e.target.value;
+                const formatted = formatNumber(val);
+                setDisplayAmount(formatted);
+                setAmount(String(parseNumber(formatted)));
+              }}
               className="bg-slate-800 border-slate-700 text-white"
             />
           </div>

@@ -12,6 +12,7 @@ export interface ApiResponse {
     totalBalance: number;
     totalIncome: number;
     totalExpense: number;
+    totalLocked: number;
   };
   // expenseChangePercentage: number; //indikator perubahan persentase pengeluaran dibandingkan periode sebelumnya
 }
@@ -43,5 +44,6 @@ export interface DreamCardProps {
   targetAmount: number;
   currentAmount: number;
   category?: string;
-  isCompelete: boolean;
+  isComplete: boolean;
+  refreshData?: () => void;
 }

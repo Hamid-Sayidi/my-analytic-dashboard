@@ -9,7 +9,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-}
+  url = env ("DATABASE_URL")
+  }
 
 model Transaction{
   id        Int       @id @default(autoincrement())
@@ -20,10 +21,11 @@ model Transaction{
 }
 
 model DreamSavings{
-  id            Int     @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   title         String
-  targetAmount  Int
-  currentAmount Int     @default(0)
+  targetAmount  Float
+  currentAmount Float       @default(0)
   category      String?  
-  isCompelete   Boolean @default(false)
+  isComplete    Boolean   @default(false)
+  updatedAt     DateTime? @updatedAt
 }

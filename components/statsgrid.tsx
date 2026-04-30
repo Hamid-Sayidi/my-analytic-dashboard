@@ -1,13 +1,13 @@
 import { Card, Flex, Grid, Metric, Text, BadgeDelta } from "@tremor/react";
 import { StatsProps } from "@/types/transaction";
-import { formatCurrency } from "@/utils/formatters";
+import { formatRupiah } from "@/utils/formatters";
 
 export default function StatsGrid({ balance, income, expense }: StatsProps) {
   return (
     <Grid numItemsSm={2} numItemsLg={3} className="gap-6">
       <Card className="bg-slate-900 border-slate-800 ring-0 decoration-emerald-500 decoration-t-4">
         <Text className="text-slate-400">Saldo saat ini</Text>
-        <Metric className="text-white">{formatCurrency(balance)}</Metric>
+        <Metric className="text-white">{formatRupiah(balance)}</Metric>
       </Card>
 
       <Card className="bg-slate-900 border-slate-800 ring-0 decoration-emerald-500 decoration-t-4">
@@ -17,7 +17,7 @@ export default function StatsGrid({ balance, income, expense }: StatsProps) {
             +8.2%
           </BadgeDelta>
         </Flex>
-        <Metric className="text-white">{formatCurrency(income)}</Metric>
+        <Metric className="text-white">{formatRupiah(income)}</Metric>
       </Card>
 
       <Card className="bg-slate-900 border-slate-800 ring-0 decoration-emerald-500 decoration-t-4">
@@ -27,7 +27,7 @@ export default function StatsGrid({ balance, income, expense }: StatsProps) {
             -2.4%
           </BadgeDelta>
         </Flex>
-        <Metric className="text-white">{formatCurrency(expense)}</Metric>
+        <Metric className="text-white">{formatRupiah(expense)}</Metric>
       </Card>
     </Grid>
   );

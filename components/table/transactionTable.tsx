@@ -1,5 +1,5 @@
 "use client";
-import { formatCurrency } from "@/utils/formatters";
+import { formatRupiah } from "@/utils/formatters";
 import {
   Table,
   TableBody,
@@ -120,7 +120,7 @@ export default function TransactionTable({
                 {new Date(item.tanggal).toLocaleDateString("id-ID")}
               </TableCell>
               <TableCell className="text-white font-mono">
-                {formatCurrency(item.nominal)}
+                {formatRupiah(item.nominal)}
               </TableCell>
               <TableCell className="text-right">
                 <button
@@ -144,7 +144,7 @@ export default function TransactionTable({
       </Table>
       <div className="mt-6 flex items-center justify-between bg-slate-900 p-4 rounded-lg border border-slate-800">
         <p className="text-sm text-slate-400">
-          Halaman <span className="text-white">{currentPage}</span> dari
+          Halaman <span className="text-white">{currentPage}</span> dari{" "}
           <span className="text-white">{totalPages}</span>
         </p>
         <div className="flex gap-2">
